@@ -1,0 +1,54 @@
+\documentclass{article}
+\input{test-params}
+\usepackage{usdc-or}
+\newcommand\myslash{\char`\\}
+
+\newcommand{\foo}[0]{LONG FOO MACRO FOR TESTING REDACTION}
+
+\begin{document}
+\begin{itemize}
+\item The \texttt{\myslash{}foo} macro expands to: \foo
+\item This is a redaction: \texttt{my redacted text}|\redact{my redacted text} \label{item1}
+\item This is a redaction with a macro inside it: \texttt{my redacted \myslash{}foo}|\redact{my redacted \foo}
+\item This is a redaction with an optional replacement: \texttt{my redacted text -> abc}|\redact[ABC]{my redacted text}
+\item This is a literal redaction: \texttt{my redacted text}|\litredact{my redacted text}|$\leftarrow$ was white space redacted
+\begin{itemize}
+\item |my redacted text|
+\item |\litredact{my redacted text}|
+\end{itemize}
+\item This is a literal redaction with a macro: \texttt{my redacted \myslash{}foo}|\litredact{my redacted \foo}|$\leftarrow$ was white space redacted. White-space redactions may not work well across line breaks.
+\begin{itemize}
+\item |my redacted \foo|
+\item |\litredact{my redacted \foo}|
+\end{itemize}
+\item The above works, but some things, like \texttt{\myslash{}ref}, won't inside \texttt{\myslash{}litredact}. This is because those can't be expanded at the time the macro is evaluated.
+\item Here is a redaction with a ref inside it: \texttt{my redacted \myslash{}ref\{item1\}}|\redact{my redacted \ref{item1}}
+\end{itemize}
+
+\newpage
+
+Literal redaction will not generally preserve the exact spacing, because it is \emph{a priori} and the white space boxes don't have the same processing as character boxes (characters are tokenized, but combined into boxes by words and then glued together by \TeX, which is lost when a blank box is used). One can preserve exact spacing would be to \emph{a posteriori} redact, but I don't know of a way to automate this. If the blank boxes are somehow made to be like boxes on letters, perhaps they would be treated by \TeX\ just like letters and the typeset results would be identical except for some hypenation rules based on the characters used.
+
+\begin{minipage}[t]{.5\textwidth}
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Ut purus elit, vestibulum ut, placerat ac,
+adipiscing vitae, felis. Curabitur dictum gravida mauris. Nam arcu libero, nonummy eget, consectetuer
+id, vulputate a, magna. Donec vehicula augue eu neque. Pellentesque habitant morbi tristique senectus
+et netus et malesuada fames ac turpis egestas. Mauris ut leo. Cras viverra metus rhoncus sem. Nulla
+et lectus vestibulum urna fringilla ultrices. Phasellus eu tellus sit amet tortor gravida placerat. Integer
+sapien est, iaculis in, pretium quis, viverra ac, nunc. Praesent eget sem vel leo ultrices bibendum. Aenean
+faucibus. Morbi dolor nulla, malesuada eu, pulvinar at, mollis ac, nulla. Curabitur auctor semper nulla.
+Donec varius orci eget risus. Duis nibh mi, congue eu, accumsan eleifend, sagittis quis, diam. Duis eget
+orci sit amet orci dignissim rutrum.
+\end{minipage}
+%
+\begin{minipage}[t]{.5\textwidth}
+\litredact{Lorem} ipsum \litredact{dolor} sit \litredact{amet}, consectetuer \litredact{adipiscing} elit. \litredact{Ut} purus \litredact{elit}, vestibulum \litredact{ut}, \litredact{placerat} ac,
+\litredact{adipiscing} vitae, \litredact{felis}. Curabitur \litredact{dictum} gravida \litredact{mauris}. Nam \litredact{arcu} libero, \litredact{nonummy} eget, \litredact{consectetuer} id, \litredact{vulputate} a, \litredact{magna}. Donec \litredact{vehicula} augue \litredact{eu} neque. \litredact{Pellentesque} habitant \litredact{morbi} tristique \litredact{senectus}
+et \litredact{netus} et \litredact{malesuada} fames \litredact{ac} turpis \litredact{egestas}. Mauris \litredact{ut} leo. \litredact{Cras} viverra \litredact{metus} rhoncus \litredact{sem}. Nulla
+\litredact{et} lectus \litredact{vestibulum} urna \litredact{fringilla} ultrices. \litredact{Phasellus} eu \litredact{tellus} sit \litredact{amet} tortor \litredact{gravida} placerat. \litredact{Integer} sapien \litredact{est}, iaculis \litredact{in}, pretium \litredact{quis}, viverra \litredact{ac}, nunc. \litredact{Praesent} eget \litredact{sem} vel \litredact{leo} ultrices \litredact{bibendum}. Aenean
+\litredact{faucibus}. Morbi \litredact{dolor} nulla, \litredact{malesuada} eu, \litredact{pulvinar} at, \litredact{mollis} ac, \litredact{nulla}. Curabitur \litredact{auctor} semper \litredact{nulla}.
+Donec \litredact{varius} orci \litredact{eget} risus. \litredact{Duis} nibh \litredact{mi}, congue \litredact{eu}, accumsan \litredact{eleifend}, sagittis \litredact{quis}, diam. \litredact{Duis} eget
+\litredact{orci} sit \litredact{amet} orci \litredact{dignissim} rutrum.
+\end{minipage}
+
+\end{document}

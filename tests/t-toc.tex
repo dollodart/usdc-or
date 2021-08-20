@@ -1,0 +1,28 @@
+\documentclass{article}
+\input{test-params}
+\usepackage{usdc-or}
+
+\begin{document}
+
+\tableofcontents
+
+\part{Part (not used in legal proceedings)}
+
+\section{A}
+\paragraph{} What is a paragraph? \label{para-1}
+\subparagraph{} What is a subparagraph? \label{subpara-1}
+\subsection{B}
+\paragraph{} What is a paragraph? \label{para-2}
+\subparagraph{} What is a subparagraph? \label{subpara-2}
+\subsubsection{C}
+\paragraph{} What is a paragraph? \label{para-3}
+\subparagraph{} What is a subparagraph? \label{subpara-3}
+
+Then there is \ref{para-1}, \ref{para-2}, \ref{para-3} for references to paragraphs in a section, subsection, and subsubsection.
+
+Then there is \ref{subpara-1}, \ref{subpara-2}, \ref{subpara-3} for references to paragraphs in a section, subsection, and subsubsection.
+
+\paragraph Without the group after.
+\subparagraph Without the group after.
+
+\end{document}

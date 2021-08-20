@@ -1,0 +1,18 @@
+% anytime the bibliography manager isn't desired for formatting the counsel
+% one can custom define the makecounsel macros
+% makecounselone is the filing party (this assumes the filing party is always the same party type, e.g., defendant or plaintiff, respondent or petitioner, which if you are preparing documents for a case is true)
+% makecounseltwo is the non-filing party
+
+\documentclass[12pt]{article}
+\input{test-params}
+\usepackage{usdc-or}
+\renewcommand{\doctype}{Complaint}
+
+\def \makecounselone {WISE M. R. COYOTE\\Counsel for the Petitioner}
+\def \makecounseltwo {ROADRUNNER, III, J.D.\\Counsel for the Respondent}
+
+\begin{document}
+\makeheader
+Where does my text body start?
+\certificateofservice
+\end{document}

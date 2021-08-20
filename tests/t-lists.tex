@@ -1,0 +1,73 @@
+\documentclass{article}
+\input{test-params}
+\usepackage{usdc-or}
+
+\begin{document}
+
+\tableofcontents
+
+\part{Parts (optional, not used in legal proceedings often)}
+
+\section{A Section}\label{section}
+\begin{enumerate}
+\item A \label{section-one}
+\begin{enumerate}
+\item B \label{section-two}
+\begin{enumerate}
+\item C \label{section-three}
+\begin{enumerate}
+\item D \label{section-four}
+\end{enumerate}
+\end{enumerate}
+\end{enumerate}
+\end{enumerate}
+
+\subsection{A subsection}\label{subsection}
+\begin{enumerate}
+\item E \label{subsection-one}
+\begin{enumerate}
+\item F \label{subsection-two}
+\begin{enumerate}
+\item G \label{subsection-three}
+\begin{enumerate}
+\item H \label{subsection-four}
+\end{enumerate}
+\end{enumerate}
+\end{enumerate}
+\end{enumerate}
+
+\subsubsection{A subsubsection}
+\begin{enumerate}
+\item I \label{subsubsection-one}
+\begin{enumerate}
+\item J \label{subsubsection-two}
+\begin{enumerate}
+\item K \label{subsubsection-three}
+\begin{enumerate}
+\item L \label{subsubsection-four}
+\end{enumerate}
+\end{enumerate}
+\end{enumerate}
+\end{enumerate}
+
+Here are references:
+
+\begin{itemize}
+\item \texttt{section-one}: \ref{section-one}
+\item \texttt{section-two}: \ref{section-two}
+\item \texttt{section-three}: \ref{section-three}
+\item \texttt{section-four}: \ref{section-four}
+\item \texttt{subsection-one}: \ref{subsection-one}
+\item \texttt{subsection-two}: \ref{subsection-two}
+\item \texttt{subsection-three}: \ref{subsection-three}
+\item \texttt{subsection-four}: \ref{subsection-four}
+\item \texttt{subsubsection-one}: \ref{subsubsection-one}
+\item \texttt{subsubsection-two}: \ref{subsubsection-two}
+\item \texttt{subsubsection-three}: \ref{subsubsection-three}
+\item \texttt{subsubsection-four}: \ref{subsubsection-four}
+\end{itemize}
+
+\section{Inline list test}
+
+\begin{inline} \item a note, \begin{inline} \item a subnote \end{inline} and \item another note, and \item a final note \end{inline}
+\end{document}

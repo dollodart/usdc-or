@@ -1,0 +1,12 @@
+% note caption as defined omits counsel information, which is sourced from a ref database
+% different than the parameters file for the case
+\documentclass{article}
+\input{test-params}
+\usepackage{usdc-or}
+\renewcommand{\doctype}{Complaint}
+
+\begin{document}
+% \makeheader % requires counsel info
+\makecaption
+Where does my text body start?
+\end{document}

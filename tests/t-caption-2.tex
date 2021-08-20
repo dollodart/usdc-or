@@ -1,0 +1,19 @@
+% note caption as defined omits counsel information, which is sourced from a ref database
+% different than the parameters file for the case
+\documentclass[12pt]{article}
+\include{test-params}
+\def \pleadingsubcaption {VERY LONG LIST OF CLAIMS\\CLAIM 1 LONG LONG LONG LONG LONG CLAIM\\CLAIM 2\\CLAIM 3\\CLAIM 4 LONG LONG LONG LONG LONG CLAIM\\CLAIM 5\\CLAIM 6\\CLAIM 7 LONGLONGLONGLONGLONGLONG CLAIM\\CLAIM 8\\CLAIM 9}
+\def \partiestwo {Church of the Flying Spaghettic Monster, Hon. Rev. Colander Head}
+\def \partiestwotype {Defendants}
+\def \partiesone {Alice Aardvark, Bob Baba, Charles Cab}
+\def \partiesonetype {Plaintiffs}
+\def \doctype {Very long long long long long document type name: more than 10 words long}
+\usepackage{usdc-or}
+
+\begin{document}
+% \makeheader % requires counsel info
+\makecaption
+
+Where does my text body begin when the pleading subcaption is so much longer than the parties?
+
+\end{document}

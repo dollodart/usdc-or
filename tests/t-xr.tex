@@ -1,0 +1,47 @@
+\documentclass{article}
+\input{test-params}
+\usepackage{usdc-or}
+
+% results are not just pdf, but pdfviewer, dependent
+\externaldocument[l-]{t-lists}[t-lists]
+
+\begin{document}
+
+\section{\texttt{xr-hyper} links to other \LaTeX documents}
+
+One can use \texttt{xr-hyper} to get links to other sections in LaTeX documents using their alias or key names. Prefix here is \texttt{l-}.
+
+\noindent
+\texttt{\string\ref\{l-section-one\}}: \ref{l-section-one}\\
+\texttt{\string\ref\{l-section-two\}}: \ref{l-subsubsection-four}
+
+\section{\texttt{href} links to external documents}
+
+PDF urls, depending on the viewer, support page number specifications. In some viewers it is reported a specification like \texttt{pdffile.pdf\#bookmark} will link you to the pdf bookmark (does that also support arbitrary, at least HTML compatible, text, e.g., with spaces? No). Only Adobe "destinations" are documented from cursory review. Only some pdfs will keep page links?
+
+\noindent
+\href[page=3]{t-censor.pdf}{\texttt{\string\href[page=3]\{t-censor.pdf\}}}\\
+\href{t-censor.pdf#page=3}{\texttt{\string\href\{t-censor.pdf\#page=3\}}}\\
+\href{t-censor.pdf#page=page.3}{\texttt{\string\href\{t-censor.pdf\#page=page.3\}}}\\
+\href{run:t-censor.pdf#page=3}{\texttt{\string\href\{run:t-censor.pdf\#page=3\}}}\\
+\href[page=3]{./t-censor.pdf}{\texttt{\string\href[page=3]\{./t-censor.pdf\}}}\\
+\href{./t-censor.pdf#page=3}{\texttt{\string\href\{./t-censor.pdf\#page=3\}}}\\
+\href{./t-censor.pdf#page=page.3}{\texttt{\string\href\{./t-censor.pdf\#page=page.3\}}}\\
+\href{run:./t-censor.pdf#page=3}{\texttt{\string\href\{run:./t-censor.pdf\#page=3\}}}\\
+% implicit named definitions
+%\href{t-censor.pdf#Every Other Three}{\texttt{\textbackslash href\{t-censor.pdf\#Every Other Three\}}}
+%\href{t-censor.pdf#Every\_Other\_Three}{\texttt{\textbackslash href\{t-censor.pdf\#Every\_Other\_Three\}}}
+
+Here is a custom macro which just rewrites a call to \textbackslash href
+
+\externalcitepage{t-censor.pdf}{3}{\texttt{\string\externalcitepage\{t-censor.pdf\}\{3\}}}
+% note: maybe the results are viewer dependant?
+
+\noindent Test named destinations\\
+\href{t-censor.pdf#nameddest=section.3}{\texttt{\string\href\{t-censor.pdf\#nameddest=section.3\}}}\\ % doesn't work on Okular
+%\externalcitenameddest{t-censor.pdf}{nameddest=section.3}{todo}\\
+
+\section{Testing HyperDestRename}
+\paragraph Was changed \label{abc}
+\subparagraph Was changed \label{def}
+\end{document}
