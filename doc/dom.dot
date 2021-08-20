@@ -1,0 +1,34 @@
+graph {
+  S1 [label="S"]
+  P1 [label="P"]
+  P2 [label="P"]
+  SS1 [label="SS"]
+  SP1 [label="SP"]
+  P3 [label="P"]
+  P4 [label="P"]
+  SSS1 [label="SSS"]
+  SSS2 [label="SSS"]
+  P5 [label="P"]
+  P6 [label="P"]
+  SP2 [label="SP"]
+  SP3 [label="SP"]
+  P7 [label="P"]
+  P8 [label="P"]
+  P9 [label="P"]
+  D -- S1
+  S1 -- P1
+  S1 -- P2
+  S1 -- SS1
+  P1 -- SP1
+  SS1 -- P3
+  SS1 -- P4
+  SS1 -- SSS1
+  SS1 -- SSS2
+  SSS1 -- P5
+  SSS1 -- P6
+  P5 -- SP2
+  P5 -- SP3
+  SSS2 -- P7
+  SSS2 -- P8
+  SSS2 -- P9
+}
