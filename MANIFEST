@@ -1,0 +1,24 @@
+The work has the LPPL maintenance status as `maintained`.
+
+Please raise issues at the Github https://github.com/dollodart/usdc-or
+
+The current maintainer of this work is D. Ollodart.
+
+This work consists of the files
+
+- usdc-or.sty
+- backlink.tex
+
+and the test files in the test directory
+
+- test-params.tex
+- t-backlinks.tex
+- t-caption-2.tex
+- t-caption.tex
+- t-censor.tex
+- t-geometry.tex
+- t-header.tex
+- t-lists.tex
+- t-redact.tex
+- t-toc.tex
+- t-xr.tex
