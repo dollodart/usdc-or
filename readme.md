@@ -7,15 +7,15 @@ sequences must be defined before loading the style, and here that is
 accomplished by the line `\input{test-params}` to input the macros contained in
 test-params.tex before `\usepackage{usdc-or}`.
 
-This package automates the case caption, counsel information (a macro should be
-provided to typeset the counsel information), signature, and certificate of
-service. It can be used with the legbib package, also by this author, to
-automate legal citations, including those to exhibits and to counsel (an
-@counsel entry is defined in a .bib used to typeset the counsel contact
-information by Biblatex). The LaTeX article class and other standard (tex-live)
-packages (hyperref, fancyhdr) are used to automate footers, page numbering,
-table of contents, section and paragraph references (including links), and
-backlinks.
+This package automates the case caption, case header (=caption + counsel
+information, a macro should be provided to typeset the counsel information),
+signature, and certificate of service. It can be used with the legbib package,
+also by this author, to automate legal citations, including those to exhibits
+and to counsel (an @counsel entry is defined in a .bib used to typeset the
+counsel contact information by Biblatex). The LaTeX article class and other
+standard (tex-live) packages (hyperref, fancyhdr) are used to automate footers,
+page numbering, table of contents, section and paragraph references (including
+links), and backlinks.
 
 ## Document Object Model
 
@@ -29,10 +29,11 @@ The references to sections are arabic numbers, the paragraphs alphabetical, and
 the subparagraphs roman, with delimitation by dots between sections and opening
 and closing parantheses around paragraphs and subparagraphs. Therefore the
 general reference is, in an approximate regex,
-`\d+\.(\d+\.)?(\d+\.)?\([a-z]\)(\([romannumeral]\))?` (see
+`\d+(\.\d+)?(\.\d+)?\([a-z]\)(\([romannumeral]\))?` (see
 https://stackoverflow.com/questions/267399 for regex for roman numerals). The
 named destinations are given the same text as what is typeset to allow for easy
-cross-referencing.
+cross-referencing, with a prefix as to what (section, subsection,
+subsubsection, paragraph, and subparagraph) is being referenced separated by a dot.
 
 ## Redaction
 
@@ -71,6 +72,6 @@ unredacted text what sequence(s) of characters could have been used.
 - Add cross-referencing (in \externalcitenameddest) to named destinations,
   which are the pdf equivalent of HTML fragments. All pdf viewers tested
   (Okular, Evince, PDFStudio) don't support links to named destinations, however.
-- Add conservative redaction (LuaLaTeX).
+- Add conservative *a priori* redaction (LuaLaTeX).
 - Add redaction for section headings (protected commands).
-- Add width-control for page marks to allow section headings (protected commands).
+- Add width-control for page marks to allow section headings without overlap (protected commands).
