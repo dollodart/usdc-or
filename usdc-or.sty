@@ -1,0 +1,424 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{usdc-or}[2021/01/01 United States District Court District of Oregon Pleading Style]
+
+%% unicode characters input conversion
+\DeclareUnicodeCharacter{2029}{ }
+\DeclareUnicodeCharacter{2212}{--}
+% remove the "minus sign" unicode character
+% replace it with em dash
+
+%% automatic character escaping and hyperlinking of URLs
+\RequirePackage{url}
+
+%% list and enumerating (paragraph numbering)
+
+\setcounter{secnumdepth}{5}
+
+% need arbitrary formatting hook with access to current values of section and so on. from ref.dtx, there is
+% \def\label#1{\@bsphack
+%  \protected@write\@auxout{}%
+%         {\string\newlabel{#1}{{\@currentlabel}{\thepage}}}%
+%  \@esphack}
+
+%  This is implemented as follows.  A referencable counter  CNT  is
+%  incremented by the command  \refstepcounter{CNT} , which sets
+%  \@currentlabel == {CNT}{eval(\p@cnt\theCNT)}.   The command
+%  \label{FOO} then writes the following on file \@auxout :
+%        \newlabel{FOO}{{eval(\@currentlabel)}{eval(\thepage)}}
+
+% \p@foo is an arbitrary formatting hook. revised like in revtex4 class
+
+\def\zerotester{\ifnum\thesubsection=0 \thesection\else \ifnum\thesubsubsection=0 \thesection.\thesubsection \else \thesection.\thesubsection.\thesubsubsection \fi \fi}
+
+\def\thepart          {\Roman{part}} %
+\def\thesection       {\arabic{section}}
+\def\p@section        {}
+\def\thesubsection    {\arabic{subsection}}
+\def\p@subsection     {\thesection.}
+\def\thesubsubsection {\arabic{subsubsection}}
+\def\p@subsubsection  {\thesection.\thesubsection.}
+\def\theparagraph     {(\alph{paragraph})}
+\def\p@paragraph {\zerotester}
+\def\thesubparagraph  {(\roman{subparagraph})}
+\def\p@subparagraph {\zerotester \theparagraph}
+
+\def\theenumi{(\alph{enumi})}
+\def\labelenumi{(\alph{enumi})}
+\def\p@enumi {\zerotester}
+\def\theenumii{(\roman{enumii})}
+\def\labelenumii{(\roman{enumii})}
+\def\p@enumii {\zerotester\theenumi}
+\def\theenumiii{(\Alph{enumiii})}
+\def\labelenumiii{(\Alph{enumiii})}
+\def\p@enumiii {\zerotester\theenumi\theenumii}
+\def\theenumiv{(\Roman{enumiv})}
+\def\labelenumiv{(\Roman{enumiv})}
+\def\p@enumiv {\zerotester\theenumi\theenumii\theenumiii}
+
+% this will better format section counts
+% only in section formatting, not in TOC (I left TOC because it is implicit by the indentation)
+\def \@seccntformat#1{\csname p@#1\endcsname\csname the#1\endcsname\quad}
+
+% hanging indents for paragraphs and subparagraphs are from TeXbook (CH 14, p. 102)
+\def\paragraph{%
+  \@startsection
+    {paragraph}%
+    {4}%
+    {2.\parindent}%
+    {\z@}% no spacing below section
+    {\z@}% no spacing for label
+    {\normalfont\normalsize}
+    {} % no argument (heading) given 
+    % paragraphs and subparagraphs never have headings in legal documents
+    \hangindent=\parindent
+}%
+\def\subparagraph{%
+  \@startsection
+    {subparagraph}%
+    {5}%
+    {4.\parindent}%
+    {\z@}%
+    {\z@}%
+    {\normalfont\normalsize}
+    {}
+    \hangindent=2.\parindent
+}%
+% all paragraphs should be delimited in lists as paragraphs or subparagraphs in a legal document
+% if you disagree, you can make \parindent zero so that text can be placed in section headings as different from para/subpara
+
+\RequirePackage{enumitem}
+\newlist{inline}{enumerate*}{2}
+\setlist[inline, 1]{itemjoin={{, }}, label=\arabic*}
+\setlist[inline, 2]{itemjoin={{; }}, label=\theenumi.\arabic*}
+% max depth of two for inline lists
+% convention has the inner delimiter change from comma to semicolon
+% that would require some logic based on the input, e.g., if there is a nested environment change the outermost from comma to semicolon
+
+%% document geometry
+% margins are 1"
+% paper size can be legal 
+% however, legal proceedings are often 8.5" x 11"
+\paperwidth=8.5in
+\paperheight=11in % could be 13"
+\textwidth=6.5in
+\textheight=8in
+\topmargin=0in % there is a default 1 inch margin everywhere, smaller may require negative numbers
+\oddsidemargin=0in
+\evensidemargin=0in
+\marginparwidth=0in
+\marginparsep=0in
+\headheight=0in
+\headsep=0.0in %legal proceedings rarely us headers
+\footskip=0.75in %legal proceedings rarely use footnotes, but page is done on
+%note the ...
+
+% list parameters (if you choose to use lists in addition to paragraphs)
+% see figure 6.3 of LaTeX User's Guide
+%\labelwidth
+%\labelsep
+%\leftmargin
+%\rightmargin
+%\topsep
+%\listparindent
+%\itemindent
+%\itemsep
+
+%% paragraph spacing
+\parindent=10pt
+\RequirePackage{setspace} 
+% this just maps font size and qualitative spacing description to point values for \setstretch
+% though there are some other things to be handled as regards footnotes
+\newcommand{\startpleading}{\doublespacing} 
+\newcommand{\stoppleading}{\singlespacing} 
+
+%% hypenation
+%\pretolerance=100
+%\tolerance=200
+%\hyphenpenalty=50
+%\exhypenpenalty=50
+
+% demerits in badness^2 units
+%\adjdemerits=10000
+%\doublehyphendemerits=10000
+%\finalhypendemerits=5000
+
+% above are plain TeX values for hypenations (see CH 14, TeXbook)
+
+\newenvironment{nohyphen}
+  {\tolerance=1
+   \emergencystretch=\maxdimen%
+   \hyphenpenalty=10000%
+   \hbadness=10000}
+  {\par}
+% prevent hyphenation for text body
+
+%% quotation 
+%\newcommand{\enquote}[1]{\lq\lq{}#1\rq\rq{}}
+\RequirePackage{csquotes} % context sensitive (argument length, nested quotations)
+
+%% legal orthography
+\newcommand{\legalellipse}{*~*~*} % triple asterisks with inteveneing spaces are often used to obviously indicate skipping
+
+%% dates
+\RequirePackage{texdate}
+\newcommand{\legaldate}[3]{\initdate{#1}{#2}{#3}\printfdate{american}}
+\newcommand{\legalmonth}[2]{\initdate{#1}{#2}{1}%
+\def\setdateformat{B\ Y}%
+\printdate%
+\def\setdateformat{B\ e,\ Y}}
+\newcommand{\legalyear}[1]{\initdate{#1}{1}{1}%
+\def\setdateformat{Y}%
+\printdate%
+\def\setdateformat{B\ e,\ Y}}
+
+%% page numbering
+\RequirePackage{fancyhdr}
+\fancypagestyle{pleading}
+{
+\pagestyle{fancy}
+\fancyhead[C,R,L]{}
+\fancyfoot[C]{}
+% different conventions exist for what is indicated (if previous section, or section appearing on page)
+% this is solved in TeXBook CH 23
+% and discussed in fancyhdr manual Section 12
+% this can be controlled with \leftmark and \rightmark
+% TODO: one may want to add section headings, but these can often be overlong.
+% anything to do with section headings, however, is difficult because of the need to protect fragile commands.
+% I couldn't edit the mark, e.g., to truncate it, inside \sectionmark (even with \protect).
+% this requires manually editing the left and right marks for cases where it is overlong, which can be done, but is omitted here
+\renewcommand{\sectionmark}[1]{\markright{\S\thesection}} %\textbf{##1}}}
+\renewcommand{\subsectionmark}[1]{\markright{\S\thesection.\thesubsection}}% \textbf{##1}}}
+\fancyfoot[R]{{\small \nouppercase{\rightmark}}} % for bibliographies
+\fancyfoot[L]{{\bf \ifcsvoid{doctypeshort}{\doctype}{\doctypeshort}} \thepage}
+\renewcommand{\headrulewidth}{0pt}
+}
+\pagestyle{pleading} % set the page style to pleading
+
+%% bibliography
+%\RequirePackage{mycustombiblatexpackage}
+
+%% index
+%\RequirePackage{makeidx}
+
+%% exhibits
+%% exhibits use the bibliography manager 
+
+\RequirePackage{graphicx}
+\RequirePackage{pdfpages}
+\RequirePackage{verbatim} % for verbatim transcripts
+
+%% references and citations
+\RequirePackage{xr-hyper}
+% xr-hyper must come before hyperref. xr-hyper lets you cross-link documents
+% made from LaTeX source, but this uses the original key, not the section
+% numbers. since you read the typset product, this can be made easier by having
+% a script which replaces, using aux files, number designations of
+% sections/paragraphs with the document or file name, e.g.,
+% \postreference{documentname}{7.3.2} -> \ref{documentname-thekeyvalue}. TODO
+\RequirePackageWithOptions{hyperref}
+\hypersetup{linktoc=all,
+pdftitle=\doctype,
+pdfauthor=\partiesone,
+pdfsubject=legal document,
+pdfcreator=usdc-or package,
+%destlabel=true,%add other named destinations (from labels) than those by default
+pdfnewwindow=true,%open in new window, but even when false Evince opens in new window, and even when true Okular does not
+pageanchor=true,%default true
+pdfpagelabels=true%default true
+%,plainpages=true%legal documents should not have page numbers other than arabic (unlike, e.g., books which may have latin)
+}
+% hyperref loaded at end due to package dependencies
+% don't need to worry about key-value option parsing if already defined in other package or class
+
+\def\externalcitepage#1#2#3{% will only work in some viewers (yes Okular and pdfstudio, no Evince)
+\href[page=#2]{#1}{#3}
+}
+\def\externalcitenameddest#1#2#3{% will only work in some viewers (none of okular,pdfstudio,evince)
+\href{#1\#nameddest=#2}{#3}%problem with catcode when literal hash (need to input as parameter argument token, but hard to do)
+}
+
+% this is the same
+% but is easier since it doesn't need \p@macro defined because of aux file writing/reading
+\def\theHparagraph{\zerotester (\alph{paragraph})}
+\def\theHsubparagraph{\theHparagraph(\roman{subparagraph})}
+
+% clickable backlinks from section headings to table of contents
+\input{backlink}
+
+%% redaction (a priori)
+
+%\RequirePackage{xstring}
+%\noexpandarg\StrLen{#2}[\Len] 
+% noexpandarg in case argument contains \ref or other unexpandable
+
+\def\length#1{{\count0=0 \getlength#1\end \number\count0}}
+\def\getlength#1{\ifx#1\end \let\next=\relax
+  \else\advance\count0 by1 \let\next=\getlength\fi \next}
+% from TeXbook CH 20, unless other xstring functions are required
+
+\providecommand\redact[2][]{%
+\ifx\\#1\\%no optional argument
+  \texttt{R}-\length{#2}%
+\else%
+  \texttt{\MakeUppercase{#1}}%
+\fi
+}
+% fragile command, not to be used in the table of contents
+
+% don't use this for section headings. 
+% (1) strings not supported in pdf bookmarks (fixable, using \pdfortexstring)
+% (2) fragility of command (hard to fix)
+% if you are using option arguments inside your command it is fragile and can't be \protected
+
+% from TeX FAQ:
+
+% In short, the situation is confusing. No-one believes this is
+% satisfactory; the LaTeX team have removed the need for protection of
+% some things, but the techniques available in current LaTeX mean that
+% this is an expensive exercise. It remains a long-term aim of the team to
+% remove all need for \protection.
+
+% some solutions exist to change these into mandatory argument commands before they're seen in .aux files, though (Oberdiek solution)
+
+% white spacing redaction (only works for literal input, doesn't support, e.g., macro input)
+% see 6.4.4 LaTeX User's Guide and Reference Manual
+% default glue for boxes is the same, regardless if they are characters
+
+\def\xloop#1{%
+  \ifx\relax#1%
+    \else%
+      \phantom{#1}%
+      \expandafter\xloop%
+  \fi}%
+% TeXbook 12.15 nominally provides a plain TeX solution with a \nullbox
+
+\providecommand\litredact[1]{\obeyspaces\xloop#1\relax}
+
+% see also censor package
+% the censor package only (1) keeps spaces and (2) keeps periods. 
+% hyphenation and ligatures change the document layout from uncensored to censored
+
+%% caption
+%\newcommand{\makecounselone}{
+%\printbibliography[noheading]{filingcounsel}}
+%\newcommand{\makecounseltwo}{
+%\printbibliography[noheading]{servedcounsel}}
+% these are currently defined in the document that uses this style
+
+\newcommand{\makeheader}{
+\noindent\makecounselone 
+\vspace*{1in} % see LR 10-2(b)
+\makecaption
+}
+
+% a lot can be done to make the caption heading pretty, even in an automated way
+% see Appendix D. p. 387 \TeXbook for finding optimum widths by simple bisection
+
+\newdimen\capcolwidth \capcolwidth=.475\textwidth
+
+\newsavebox{\captionparties}
+\newlength{\captionpartiesheight}
+\newlength{\captionpartiesdepth}
+\newlength{\captionpartiesrule}
+
+\sbox{\captionparties}{
+\begin{minipage}[t]{\capcolwidth}\large\raggedright
+\MakeUppercase{\partiesone},\\
+\makebox[\capcolwidth][l]{\makebox[.5\capcolwidth]{}\partiesonetype,}\\
+\makebox[\capcolwidth]{\hfil v. \hfil \hfil \hfil}\\
+\MakeUppercase{\partiestwo},\\
+\makebox[\capcolwidth][l]{\makebox[.5\capcolwidth]{}\partiestwotype.}
+\vskip 2pt
+\hrule
+\end{minipage}%
+}
+% not using \hfil on parties types
+% in order to left-align
+
+\setlength{\captionpartiesdepth}{\dp\captionparties}
+\setlength{\captionpartiesrule}{\captionpartiesdepth+\ht\captionparties}
+% minipage assigns boxes significant depth if top-aligning
+
+\newcommand{\makecaption}{
+\begin{center}\Large
+\courtaddress
+\end{center}
+\usebox{\captionparties}%
+\rule[-\captionpartiesdepth]{.4pt}{\captionpartiesrule}%
+\medskip % either this minipage or the other can be the one with maximum depth, add medskip to vbox construction in both
+\hfill%
+\begin{minipage}[t]{\capcolwidth}\large
+Case No. \caseno \vskip1pt \hrule depth2pt height-1.5pt \kern0pt 
+% the kern0pt ending may be due to processing rules by TeX when glueing boxes
+\vskip 2pt
+{\bf \doctype}\newline
+{%\rightskip=0pt plus1fil
+\raggedright
+\pleadingsubcaption
+}% prevent hyphenation (infinite or finite right-side glue)
+\end{minipage}
+\medskip
+}
+
+%% signature
+\newcommand{\signature}{DATED: \today.
+
+\includegraphics[width=10em]{\suppdir/\sigfile}\stoppleading
+
+\noindent\makecounselone}
+
+%% certificate of service footer
+
+\newcounter{certserv}
+\setcounter{certserv}{1}
+\fancypagestyle{certificate-of-service}
+{
+    \pagestyle{fancy}
+    \fancyhf{}
+    \renewcommand{\headrulewidth}{0pt}
+    \lfoot{{\bf Certificate of Service} \thecertserv \refstepcounter{certserv}}
+}
+
+%% certification of service
+
+\def\isundefined#1{
+\expandafter\ifx\csname #1\endcsname\relax
+[]
+\else
+[x]
+\fi
+}
+% TeXbook exercise 7.7
+
+\newcommand{\certificateofservice}{%
+\newpage\doublespacing\thispagestyle{certificate-of-service}
+I hereby certify that I served the foregoing \MakeUppercase{\doctype}
+on the following named person(s) on the date indicated below by:
+
+
+\begin{itemize}
+\item[\isundefined{servicemailed}] mailing with postage prepaid
+\item[\isundefined{servicehanddelivered}] Hand delivery
+\item[\isundefined{servicefaxed}] facsimile transmission
+\item[\isundefined{serviceovernight}] overnight delivery
+\item[\isundefined{serviceemailed}] E-mail
+\item[\isundefined{serviceECF}] ECF
+\end{itemize}
+
+to said person(s) a true copy thereof, contained in a sealed envelope, addressed to said person(s)
+at his or her last-known address(es) indicated below.
+\\\\
+\today
+\\\singlespacing
+\noindent\makecounseltwo
+}
+
+%% certificate of compliance for page count
+\newcommand{\certificateofcompliance}[1]{%
+\MakeUppercase{CERTIFICATE OF COMPLIANCE}\\
+This brief complies with the applicable word-count limitation under
+LR 7-2(b), 26-3(b), 54-1(c), or 54-3(e) because it contains #1 words,
+including headings, footnotes, and quotations, but excluding the
+caption, table of contents, table of cases and authorities, signature
+block, exhibits, and any certificates of counsel.
+}
