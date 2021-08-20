@@ -215,6 +215,10 @@
 % a script which replaces, using aux files, number designations of
 % sections/paragraphs with the document or file name, e.g.,
 % \postreference{documentname}{7.3.2} -> \ref{documentname-thekeyvalue}. TODO
+% the application is when one source document relies on another source
+% documents which is final. while one could then use the named destinations
+% provided by hyperref, one may still prefer to use the .aux file to make the
+% link.
 \RequirePackageWithOptions{hyperref}
 \hypersetup{linktoc=all,
 pdftitle=\doctype,
@@ -414,6 +418,9 @@ at his or her last-known address(es) indicated below.
 }
 
 %% certificate of compliance for page count
+% one can take the number of space tokens - 1 as the approximate number of
+% words, but I don't think LaTeX tracks the number of characters in each
+% category code within the document body.
 \newcommand{\certificateofcompliance}[1]{%
 \MakeUppercase{CERTIFICATE OF COMPLIANCE}\\
 This brief complies with the applicable word-count limitation under
